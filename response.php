@@ -1,7 +1,7 @@
 <?php
 require_once('connect.php');
 
-if(isset($_POST['submit'])){
+if(isset($_POST['action'])){
 	if(isset($_POST['username']) && !empty(trim($_POST['username']))){
 		$name = $_POST['username'];
 		$email = $_POST['email'];
@@ -9,19 +9,14 @@ if(isset($_POST['submit'])){
 	} else {
 		die("hi");
 	}
-		
-    $sql = "INSERT INTO records (username, email, age) VALUES ('$name', '$email', '$age')";
-
-
-		if ($connect->query($sql) === TRUE) {
-			$last_id = $connect->insert_id;
-			echo  $_POST['username']." Last inserted ID is: " . $last_id;
-		} else {
-			echo "Error: " . $sql . "<br>" . $connect->error;
+	$results = mysqli_query($connect, "INSERT INTO data ( username, email,age) VALUES ( '$name', '$email','$age')");
+		if($results){
+			$last_id = mysqli_insert_id($connect);
+			echo "Last id is " . $last_id;
+		} else{
+			echo mysqli_error($connect);
 		}
-		$connect->close();
-		
-}
+		}
 
 
 
@@ -49,4 +44,5 @@ function test_function(){
 	//$return["json"] = json_encode($return);
 
 	echo json_encode($_POST);
+}
 }
